@@ -1,0 +1,9 @@
+refer https://github.com/raunaksingh9800/RUNNER to use RUNNER
+
+-> build
+> b
+$ gcc -o sdl_app main.c $(sdl2-config --cflags --libs)
+
+-> run
+> r
+$ ./sdl_app
