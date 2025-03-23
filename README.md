@@ -1,53 +1,69 @@
-# 🎮 SDL Bouncing Circles Simulation
+# Raycasting and Gravity Simulation using SDL 🎮
 
-## 📝 Overview
-This project is a **simple physics simulation** built using **SDL2 (Simple DirectMedia Layer)**. It features two bouncing circles that simulate gravity, collision with the ground, and user interaction via mouse dragging.
+## Overview 📌
+This project demonstrates a **raycasting simulation with gravity effects**, implemented using **SDL (Simple DirectMedia Layer)** in C. The simulation features a primary circle casting rays, interacting dynamically with another moving circle under gravity, creating an engaging visual effect.
 
-## 🖥️ Features
-- 🎨 **Realistic Gravity Effect**: The circles fall under gravity and bounce upon hitting the ground.
-- 🖱️ **Mouse Dragging**: Click and drag the circles to move them.
-- 🌈 **Dynamic Color Transition**: The larger circle changes color dynamically.
-- 🎮 **Smooth Animation**: Runs at approximately **60 FPS** for a fluid visual experience.
+## Features ✨
+- **Raycasting System**: A central circle emits `400` rays that dynamically interact with objects.
+- **Gravity Physics**: Circles experience acceleration due to gravity and bounce upon collision.
+- **Mouse Interaction**: Move circles by dragging the mouse.
+- **Dynamic Color Transition**: Smooth color transitions for a visually appealing effect.
 
----
-
-## 🏗️ How It Works
-### Physics Simulation
-- The circles fall freely under the influence of **gravity**.
-- When they hit the ground, they bounce with a damping factor.
-- If their bounce velocity becomes too small, they eventually stop.
-
-### User Interaction
-- Moving the mouse while holding the button allows users to **drag the circles**.
-- Collision detection ensures accurate movement.
-
-### Color Animation
-- The larger circle gradually transitions between **yellow and white**, creating a smooth glowing effect.
+## Simulation Preview 🖼️
+![![Simulation Screenshot](https://github.com/raunaksingh9800/SDL/blob/main/PREVIEW.png)] 
 
 ---
 
-## 📜 Code Breakdown
-### 1️⃣ **Struct Definitions**
+## Code Breakdown 📖
+### 1️⃣ Struct Definitions
+#### **Circle Structure**
 ```c
 struct Circle {
-    double x, y, r;   // Position & radius
-    double vy;        // Vertical velocity
-    double BOUNCE_DAMPING; // Bounce energy loss
+    double x, y, r, vy, BOUNCE_DAMPING;
 };
+```
+- `x, y`: Position of the circle.
+- `r`: Radius of the circle.
+- `vy`: Velocity along the Y-axis (gravity effect).
+- `BOUNCE_DAMPING`: Controls bounce energy loss.
 
+#### **Line Structure**
+```c
+struct Line {
+    double x1, y1, x2, y2;
+};
+```
+- Represents a line segment using two points.
+
+#### **RGB Color Structure**
+```c
 struct RGB {
     uint8_t r, g, b;
 };
 ```
-- `Circle` stores properties of each bouncing ball.
-- `RGB` is used for dynamic color changes.
+- Defines colors for rendering elements.
 
-### 2️⃣ **Rendering & Physics**
+### 2️⃣ Circle Drawing Algorithm
 ```c
 void DrawCircle(SDL_Surface* surface, struct Circle* c, struct RGB* rgb)
 ```
-- Renders a filled circle by checking if each pixel lies within the radius.
+- Renders a filled circle using **pixel-by-pixel** rendering.
 
+### 3️⃣ Line Drawing Algorithm (Bresenham's Line Algorithm)
+```c
+void DrawLine(SDL_Surface* surface, struct Line* line, struct RGB* rgb, struct Circle* col_c, int count)
+```
+- Implements **Bresenham’s Line Algorithm** for efficient line rendering.
+- Checks for intersections with the moving circle.
+
+### 4️⃣ Raycasting Mechanism
+```c
+void CastRay(SDL_Surface* surface, struct Circle* c, struct Line* l, struct RGB* color, struct Circle* col_c, int count)
+```
+- Casts rays in **all directions** from the central circle.
+- Each ray extends up to `WIDTH + BLEED` pixels.
+
+### 5️⃣ Gravity and Physics Simulation
 ```c
 if (circle.y + circle.r < HEIGHT) {
     circle.vy += GRAVITY * TIME_STEP;
@@ -57,56 +73,48 @@ if (circle.y + circle.r < HEIGHT) {
     circle.vy = -circle.vy * circle.BOUNCE_DAMPING;
 }
 ```
-- Implements basic gravity and bounce physics.
+- Simulates gravity on both circles.
+- Implements **bounce damping** to reduce energy loss upon hitting the ground.
 
-### 3️⃣ **User Interaction**
+### 6️⃣ Event Handling (Mouse Interaction)
 ```c
-if (e.type == SDL_MOUSEMOTION && e.motion.state != 0) {
-    if (circle.x - circle.r < e.motion.x && circle.x + circle.r > e.motion.x &&
-        circle.y - circle.r < e.motion.y && circle.y + circle.r > e.motion.y) {
-        circle.x = e.motion.x;
-        circle.y = e.motion.y;
-    }
-}
+if (e.type == SDL_MOUSEMOTION && e.motion.state != 0) { }
 ```
-- Detects when a circle is clicked and updates its position accordingly.
+- Allows the user to drag circles using the mouse.
 
 ---
 
-## 🛠️ Installation & Setup
-### 🔹 Prerequisites
-Ensure you have **SDL2** installed. On macOS:
-```sh
-brew install sdl2
-```
-On Linux (Debian-based):
-```sh
-sudo apt install libsdl2-dev
+## Installation & Execution 🚀
+### Prerequisites 🛠️
+Ensure you have **SDL2** installed:
+```bash
+sudo apt install libsdl2-dev # Linux
+brew install sdl2           # macOS
 ```
 
-### 🔹 Compiling & Running
-```sh
-gcc -o sdl_bounce main.c -I/opt/homebrew/include/SDL2 -D_THREAD_SAFE -L/opt/homebrew/lib -lSDL2
-./sdl_bounce
+### Compilation ⚙️
+```bash
+gcc -o simulation simulation.c -lSDL2 -lm
+```
+
+### Run the Simulation 🎮
+```bash
+./simulation
 ```
 
 ---
 
-## 📌 Controls
-- **Click & Drag**: Move circles around.
-- **Quit**: Close the window.
+## Future Enhancements 🚀
+- ✅ Implement collision detection between rays and objects.
+- ✅ Improve rendering performance with optimized algorithms.
+- ✅ Add real-time UI controls for user interaction.
+
+## Author 🎨
+- **Raunak Singh**
+
+## License 📜
+This project is **open-source** and available for modification under the **MIT License**.
 
 ---
-
-## 🎯 Future Improvements
-- ✨ Add more realistic physics (e.g., friction, air resistance).
-- 🔄 Enable multiple circles with collision detection.
-- 🖼️ Add textures and better rendering for enhanced visuals.
-
----
-
-## 📜 License
-This project is open-source and free to use under the **MIT License**.
-
-🚀 **Enjoy coding and experimenting with SDL2!** 🎮
+Happy Coding! 🎉
 
