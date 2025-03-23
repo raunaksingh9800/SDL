@@ -10,7 +10,7 @@ This project demonstrates a **raycasting simulation with gravity effects**, impl
 - **Dynamic Color Transition**: Smooth color transitions for a visually appealing effect.
 
 ## Simulation Preview 🖼️
-![![Simulation Screenshot](https://github.com/raunaksingh9800/SDL/blob/main/PREVIEW.png)] 
+![Simulation Screenshot](https://github.com/raunaksingh9800/SDL/blob/main/PREVIEW.png)
 
 ---
 
