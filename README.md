@@ -94,7 +94,7 @@ brew install sdl2           # macOS
 
 ### Compilation ⚙️
 ```bash
-gcc -o simulation simulation.c -lSDL2 -lm
+gcc -o simulation main.c -lSDL2 -lm
 ```
 
 ### Run the Simulation 🎮
